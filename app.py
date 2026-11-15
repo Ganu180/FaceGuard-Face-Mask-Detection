@@ -853,6 +853,7 @@ st.write(
     "Start your webcam to detect faces and predict mask status in real time."
 )
 
+
 webrtc_streamer(
     key="faceguard-live",
     video_processor_factory=FaceMaskProcessor,
@@ -860,8 +861,16 @@ webrtc_streamer(
         "video": True,
         "audio": False
     },
+    rtc_configuration={
+        "iceServers": [
+            {
+                "urls": ["stun:stun.l.google.com:19302"]
+            }
+        ]
+    },
     async_processing=True
 )
+
 
 st.caption(
     "Allow camera permission in your browser to start live detection."
