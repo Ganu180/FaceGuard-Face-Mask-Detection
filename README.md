@@ -1,0 +1,108 @@
+# 😷 Face Mask Detection Using CNN
+
+A computer vision and deep learning project that detects whether a person is wearing a face mask using a Convolutional Neural Network (CNN) built with TensorFlow/Keras. The project supports image-based detection and real-time webcam detection.
+
+## 📌 Project Overview
+
+Face Mask Detection uses deep learning to classify faces into two categories: **Mask** and **No Mask**. The system processes images or webcam frames and predicts whether a face is covered by a mask.
+
+This project demonstrates the practical application of convolutional neural networks, image processing, and computer vision.
+
+## ✨ Features
+
+- 🧠 CNN-based face mask classification
+- 🖼️ Image-based mask detection
+- 📷 Webcam-based detection
+- 🔍 Face detection and image preprocessing
+- 📊 Classification into Mask and No Mask categories
+- ⚡ Automated prediction using a trained deep learning model
+
+## 🛠️ Technologies Used
+
+- **Python** — Core programming language
+- **TensorFlow / Keras** — CNN model development and prediction
+- **OpenCV** — Image processing and webcam integration
+- **NumPy** — Numerical operations and array processing
+
+## ⚙️ Installation and Setup
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Ganu180/Face-Mask-Detection.git
+```
+
+### 2. Navigate to the project directory
+
+```bash
+cd Face-Mask-Detection
+```
+
+### 3. Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+Activate it on Windows:
+
+```bash
+venv\Scripts\activate
+```
+
+### 4. Install dependencies
+
+If a `requirements.txt` file exists:
+
+```bash
+pip install -r requirements.txt
+```
+
+Otherwise, install the packages required by the project:
+
+```bash
+pip install tensorflow opencv-python numpy
+```
+
+### 5. Run the project
+
+Run the Python entry-point script used in your project. For example, if your main file is named `main.py`:
+
+```bash
+python main.py
+```
+
+**Note:** The script name, model file path, and dependencies must match the actual project files.
+
+## 🧠 How It Works
+
+1. **Input:** The system receives an image or captures a frame from a webcam.
+2. **Face Detection:** The face is located using the face-detection method implemented in the project.
+3. **Preprocessing:** The detected face is resized and normalized to match the CNN model's input requirements.
+4. **Classification:** The trained CNN predicts whether the face belongs to the Mask or No Mask class.
+5. **Output:** The prediction is displayed for the detected face.
+
+## 🎯 Applications
+
+- Automated mask detection demonstrations
+- Computer vision learning and experimentation
+- Smart monitoring prototypes
+- Deep learning and image classification research
+
+## 🚀 Future Enhancements
+
+- Improve model accuracy using additional training data.
+- Evaluate the model using precision, recall, F1-score, and a confusion matrix.
+- Optimize inference speed for real-time video.
+- Develop a graphical user interface.
+- Extend detection to multiple faces in a single frame.
+
+## 👨‍💻 Author
+
+**Ganesh**
+
+GitHub: [@Ganu180](https://github.com/Ganu180)
+
+## 📄 License
+
+No license has been specified. Add an appropriate open-source license if you intend to allow others to reuse, modify, or distribute this project.
