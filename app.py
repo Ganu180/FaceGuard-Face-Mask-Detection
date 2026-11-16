@@ -1,5 +1,7 @@
 
 import streamlit as st
+import base64
+from io import BytesIO
 import numpy as np
 import cv2
 import tensorflow as tf
@@ -353,6 +355,38 @@ def preprocess_face(face_rgb):
 
 
 # ==================================================
+# BASE64 IMAGE RENDERING
+# ==================================================
+
+def display_image_base64(image_rgb, caption):
+
+    image = Image.fromarray(
+        np.asarray(image_rgb, dtype=np.uint8)
+    )
+
+    buffer = BytesIO()
+    image.save(buffer, format="PNG", optimize=True)
+
+    encoded_image = base64.b64encode(
+        buffer.getvalue()
+    ).decode("utf-8")
+
+    st.markdown(
+        f'''
+        <div style="width:100%; text-align:center;">
+            <img
+                src="data:image/png;base64,{encoded_image}"
+                alt="{caption}"
+                style="width:100%; height:auto; display:block; object-fit:contain;"
+            />
+            <p style="margin-top:0.5rem; font-weight:600;">{caption}</p>
+        </div>
+        ''',
+        unsafe_allow_html=True
+    )
+
+
+# ==================================================
 # LIVE WEBCAM PROCESSOR
 # ==================================================
 
@@ -622,13 +656,7 @@ else:
             unsafe_allow_html=True
         )
 
-        st.image(
-            Image.fromarray(image_rgb),
-            caption="Original Uploaded Image",
-            width="stretch",
-            channels="RGB",
-            output_format="PNG"
-        )
+        display_image_base64(image_rgb, "Original Uploaded Image")
 
         # Load model and face detector
         detector = load_face_detector()
@@ -835,23 +863,11 @@ else:
 
         with original_col:
 
-            st.image(
-                Image.fromarray(image_rgb),
-                caption="Original Image",
-                width="stretch",
-                channels="RGB",
-                output_format="PNG"
-            )
+            display_image_base64(image_rgb, "Original Image")
 
         with result_col:
 
-            st.image(
-                Image.fromarray(result_image),
-                caption="AI Detection Result",
-                width="stretch",
-                channels="RGB",
-                output_format="PNG"
-            )
+            display_image_base64(result_image, "AI Detection Result")
 
         st.caption(
             "Predictions are model estimates and may not always be correct."
@@ -869,13 +885,7 @@ else:
 
             st.markdown("### Original Uploaded Image")
 
-            st.image(
-                Image.fromarray(image_rgb),
-                caption="Original Image",
-                width="stretch",
-                channels="RGB",
-                output_format="PNG"
-            )
+            display_image_base64(image_rgb, "Original Image")
 
 # ==================================================
 # LIVE WEBCAM DETECTION
