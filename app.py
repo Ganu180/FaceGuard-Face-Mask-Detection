@@ -602,8 +602,11 @@ if uploaded_file is None:
 
 else:
 
+    image_rgb = None
+
     try:
 
+        # Read uploaded image
         image = Image.open(uploaded_file)
 
         image = ImageOps.exif_transpose(
@@ -612,14 +615,31 @@ else:
 
         image_rgb = np.array(image)
 
+        # Show original image immediately
+        st.markdown(
+            '<div class="section-title">🖼️ Uploaded Image</div>',
+            unsafe_allow_html=True
+        )
+
+        st.image(
+            image_rgb,
+            caption="Original Uploaded Image",
+            use_container_width=True,
+            channels="RGB",
+            output_format="PNG"
+        )
+
+        # Load model and face detector
         detector = load_face_detector()
         model = load_mask_model()
 
+        # Detect faces
         faces = detect_faces(
             image_rgb,
             detector
         )
 
+        # Detection overview
         st.markdown(
             '<div class="section-title">📊 Detection Overview</div>',
             unsafe_allow_html=True
@@ -631,22 +651,17 @@ else:
         metric2.metric("Image Width", f"{image_rgb.shape[1]} px")
         metric3.metric("Image Height", f"{image_rgb.shape[0]} px")
 
+        # Always create result image
+        result_image = image_rgb.copy()
+        results = []
+
         if len(faces) == 0:
 
             st.warning(
                 "No faces detected. Try a clear front-facing image."
             )
 
-            st.image(
-                image_rgb,
-                caption="Uploaded Image",
-                use_container_width=True
-            )
-
         else:
-
-            result_image = image_rgb.copy()
-            results = []
 
             for index, (x, y, w, h) in enumerate(faces):
 
@@ -681,6 +696,7 @@ else:
                     else (212, 61, 72)
                 )
 
+                # Draw bounding box
                 cv2.rectangle(
                     result_image,
                     (x, y),
@@ -689,6 +705,7 @@ else:
                     3
                 )
 
+                # Label
                 label_text = (
                     f"{label.upper()} | {confidence:.2f}%"
                 )
@@ -735,6 +752,9 @@ else:
                     "mask_score": mask_score,
                     "no_mask_score": no_mask_score
                 })
+
+        # Classification results
+        if results:
 
             st.markdown(
                 '<div class="section-title">🎯 Classification Results</div>',
@@ -804,30 +824,37 @@ else:
                         f"{result['no_mask_score']:.2f}%"
                     )
 
-            st.markdown(
-                '<div class="section-title">🖼️ Detection Output</div>',
-                unsafe_allow_html=True
+        # Detection output - always display
+        st.markdown(
+            '<div class="section-title">🖼️ Detection Output</div>',
+            unsafe_allow_html=True
+        )
+
+        original_col, result_col = st.columns(2)
+
+        with original_col:
+
+            st.image(
+                image_rgb,
+                caption="Original Image",
+                use_container_width=True,
+                channels="RGB",
+                output_format="PNG"
             )
 
-            original_col, result_col = st.columns(2)
+        with result_col:
 
-            with original_col:
-                st.image(
-                    image_rgb,
-                    caption="Original Image",
-                    use_container_width=True
-                )
-
-            with result_col:
-                st.image(
-                    result_image,
-                    caption="AI Detection Result",
-                    use_container_width=True
-                )
-
-            st.caption(
-                "Predictions are model estimates and may not always be correct."
+            st.image(
+                result_image,
+                caption="AI Detection Result",
+                use_container_width=True,
+                channels="RGB",
+                output_format="PNG"
             )
+
+        st.caption(
+            "Predictions are model estimates and may not always be correct."
+        )
 
     except Exception as error:
 
@@ -837,6 +864,17 @@ else:
 
         st.exception(error)
 
+        if image_rgb is not None:
+
+            st.markdown("### Original Uploaded Image")
+
+            st.image(
+                image_rgb,
+                caption="Original Image",
+                use_container_width=True,
+                channels="RGB",
+                output_format="PNG"
+            )
 
 # ==================================================
 # LIVE WEBCAM DETECTION
