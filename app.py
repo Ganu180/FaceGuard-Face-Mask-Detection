@@ -596,6 +596,7 @@ if uploaded_file is None:
     """, unsafe_allow_html=True)
 
 
+
 # ==================================================
 # IMAGE PROCESSING
 # ==================================================
@@ -622,9 +623,9 @@ else:
         )
 
         st.image(
-            image_rgb,
+            Image.fromarray(image_rgb),
             caption="Original Uploaded Image",
-            use_container_width=True,
+            width="stretch",
             channels="RGB",
             output_format="PNG"
         )
@@ -835,9 +836,9 @@ else:
         with original_col:
 
             st.image(
-                image_rgb,
+                Image.fromarray(image_rgb),
                 caption="Original Image",
-                use_container_width=True,
+                width="stretch",
                 channels="RGB",
                 output_format="PNG"
             )
@@ -845,9 +846,9 @@ else:
         with result_col:
 
             st.image(
-                result_image,
+                Image.fromarray(result_image),
                 caption="AI Detection Result",
-                use_container_width=True,
+                width="stretch",
                 channels="RGB",
                 output_format="PNG"
             )
@@ -869,9 +870,9 @@ else:
             st.markdown("### Original Uploaded Image")
 
             st.image(
-                image_rgb,
+                Image.fromarray(image_rgb),
                 caption="Original Image",
-                use_container_width=True,
+                width="stretch",
                 channels="RGB",
                 output_format="PNG"
             )
@@ -891,7 +892,6 @@ st.write(
     "Start your webcam to detect faces and predict mask status in real time."
 )
 
-
 webrtc_streamer(
     key="faceguard-live",
     video_processor_factory=FaceMaskProcessor,
@@ -901,14 +901,11 @@ webrtc_streamer(
     },
     rtc_configuration={
         "iceServers": [
-            {
-                "urls": ["stun:stun.l.google.com:19302"]
-            }
+            {"urls": ["stun:stun.l.google.com:19302"]}
         ]
     },
     async_processing=True
 )
-
 
 st.caption(
     "Allow camera permission in your browser to start live detection."
